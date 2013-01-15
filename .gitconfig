@@ -1,6 +1,6 @@
 [user]
-	name = Spect
-	email = spect88@gmail.com
+  name = Spect
+  email = spect88@gmail.com
 
 [alias]
   ci = commit -a
@@ -12,7 +12,7 @@
   aa = add -A
   
 [diff]
-	tool = vimdiff
+  tool = vimdiff
 
 [difftool]
-	prompt = false
+  prompt = false
