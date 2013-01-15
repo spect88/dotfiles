@@ -1,0 +1,18 @@
+[user]
+	name = Spect
+	email = spect88@gmail.com
+
+[alias]
+  ci = commit -a
+  df = diff
+  dt = difftool
+  st = status
+  lp = log -p
+  bl = blame
+  aa = add -A
+  
+[diff]
+	tool = vimdiff
+
+[difftool]
+	prompt = false
