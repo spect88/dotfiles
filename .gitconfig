@@ -1,18 +1,41 @@
 [user]
-  name = Spect
+  name = Tomasz Szczęśniak-Szlagowski
   email = spect88@gmail.com
 
+[core]
+  ignorecase = false
+
 [alias]
-  ci = commit -a
+  co = checkout
+  ci = commit
+  ca = commit -a
   df = diff
+  dfc = diff --cached
   dt = difftool
   st = status
   lp = log -p
   bl = blame
   aa = add -A
+  sh = show
+  l  = log --pretty=oneline
+  pl = pull
+  plup = pull upstream master
+  ours = checkout --ours
+  theirs = checkout --theirs
+  lgraph = log --graph --pretty=oneline --abbrev-commit
+  cob = checkout -b
+  ff = pull --ff-only
+  merged = !git branch --merged | grep -v '\\*'
   
 [diff]
   tool = vimdiff
 
 [difftool]
   prompt = false
+
+[color]
+  ui = auto
+[filter "media"]
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true

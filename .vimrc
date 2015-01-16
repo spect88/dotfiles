@@ -4,37 +4,75 @@ filetype off
 "ruby settings
 let g:ruby_path = '/usr/bin'
 
+"plugin management
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-"taglist
-Bundle 'int3/vim-taglist-plus'
-Bundle 'mozilla/doctorjs'
+"dependencies for other plugins
+Plugin 'Shougo/vimproc.vim'
+
+"learning
+Plugin 'wikitopian/hardmode'
+nmap <Up>    <NOP>
+nmap <Down>  <NOP>
+nmap <Left>  <NOP>
+nmap <Right> <NOP>
+
+"tags
+Plugin 'majutsushi/tagbar'
 
 "exploring
-Bundle 'vim-scripts/LustyJuggler'
-Bundle 'wincent/Command-T'
+Plugin 'vim-scripts/LustyJuggler'
+Plugin 'Shougo/unite.vim'
+Plugin 'tpope/vim-projectionist'
+Plugin 'rking/ag.vim'
+
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_length'])
+call unite#custom#source('line', 'matchers', 'matcher_fuzzy')
+call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
+call unite#custom#source('file_rec/async', 'matchers', [
+    \ 'matcher_fuzzy'
+  \])
+call unite#custom#profile('default', 'context', {
+      \ 'start_insert': 1,
+      \ 'direction': 'botright',
+      \ 'winheight': 10,
+      \ 'candidate_icon': '-',
+      \ 'cursor_line_highlight': 'LineNr',
+      \ 'prompt': '» '
+  \ })
+"call unite#custom#source('file_rec,file_rec/async', 'ignore_pattern',
+"      \ '\(\.git|node_modules|tmp\)'
+"  \ )
+"call unite#custom#source('file_rec,file_rec/async', 'ignore_globs', [
+"      \ 'tmp/*',
+"      \ '*/node_modules/*'
+"  \ ])
 
 "snippets
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'honza/snipmate-snippets'
-Bundle 'garbas/vim-snipmate'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'honza/vim-snippets'
+Plugin 'garbas/vim-snipmate'
 
 "dev magic
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-fugitive'
-Bundle 'AndrewRadev/splitjoin.vim'
-
-"console
-Bundle 'rson/vim-conque'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-fugitive'
+Plugin 'AndrewRadev/splitjoin.vim'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-dispatch'
+Plugin 'tpope/vim-commentary'
+Plugin 'terryma/vim-multiple-cursors'
 
 "syntax
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'tpope/vim-markdown'
-Bundle 'nono/vim-handlebars'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'tpope/vim-markdown'
+Plugin 'nono/vim-handlebars'
+Plugin 'groenewege/vim-less'
 
 filetype plugin indent on
 
@@ -43,8 +81,10 @@ if has("gui_running")
   set guioptions=egmrt
   set guifont=Menlo:h14
   colorscheme macvim
+  set background=dark
   "hi Normal guifg=white guibg=black
 else
+  set background=light
   colorscheme default
   " koehler
 endif
@@ -57,6 +97,8 @@ set mouse=nvrh
 set clipboard=unnamed
 set incsearch
 set vb
+set ruler
+set backspace=2
 
 "indent
 set tabstop=2
@@ -71,14 +113,25 @@ set foldnestmax=10
 set nofoldenable
 set foldlevel=1
 
+
 "key mappings
 let mapleader=","
-map <leader>t :TlistToggle<CR>
-map <leader>g :CommandT<CR>
+map <leader>t :TagbarToggle<cr>
+nmap <leader>g :Unite -buffer-name=files file_rec/async:!<cr>
+nmap <leader>G :exec('Unite -buffer-name=files file_rec/async:'.expand("%:p:h"))<cr>
 map <leader>b :LustyJuggler<CR>
-map <leader>c :ConqueTerm bash<CR>
+"nmap <leader>b :Unite -quick-match -buffer-name=buffers buffer<cr>
+
+map <leader>c :ConqueTerm bash<cr>
+map <leader>r :Dispatch<cr>
 nmap <Leader>j :SplitjoinJoin<cr>
 nmap <Leader>s :SplitjoinSplit<cr>
+nmap <leader>h :call ToggleHardMode()<cr>
+
+nmap <leader>+ <C-W>5+
+nmap <leader>- <C-W>5-
+nmap <leader>< <C-W>5<
+nmap <leader>> <C-W>5>
 
 "backup settings
 set dir=~/.vim/tmp
@@ -88,10 +141,10 @@ let g:splitjoin_split_mapping = ''
 let g:splitjoin_join_mapping = ''
 
 "javascript tweaks
-let g:tlist_javascript_settings = 'javascript;s:string;a:array;o:object;f:function'
+"let g:tlist_javascript_settings = 'javascript;s:string;a:array;o:object;f:function'
 
 "ignore tmp in CommandT
-set wildignore=tmp/*
+"set wildignore=tmp/*
 
 "filetypes
-au BufRead,BufNewFile {Capfile,Gemfile,Rakefile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
+au BufRead,BufNewFile {Capfile,Guardfile,Gemfile,Rakefile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
