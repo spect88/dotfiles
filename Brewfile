@@ -10,6 +10,7 @@ brew install reattach-to-user-namespace
 brew cask install spectacle
 brew cask install flux
 brew cask install rocket-typist
+brew cask install karabiner-elements
 
 brew install nvim
 brew install the_silver_searcher
