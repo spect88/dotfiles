@@ -23,14 +23,22 @@ brew install fpp
 
 brew install pgcli
 brew install mycli
-brew install mpv
 
 brew cask install ngrok
 brew cask install kap
-brew cask install gimp
 brew cask install virtualbox
+brew cask install charles
 
 brew install rbenv
 
 brew tap universal-ctags/universal-ctags
 brew install --HEAD universal-ctags
+
+brew cask install anki
+brew cask install gimp
+brew cask install libreoffice
+brew cask install disk-inventory-x
+
+brew install youtube-dl
+brew install mpv
+brew cask instal vlc
