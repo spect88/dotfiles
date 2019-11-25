@@ -4,11 +4,15 @@
 
 [core]
   ignorecase = false
+  excludesfile = ~/.gitignore_global
 
 [alias]
   co = checkout
   ci = commit
+  cim = commit --amend
   ca = commit -a
+  cam = commit -a --amend
+  cp = cherry-pick
   df = diff
   dfc = diff --cached
   dt = difftool
@@ -21,12 +25,15 @@
   pl = pull
   plup = pull upstream master
   ours = checkout --ours
+  rim = rebase -i master
   theirs = checkout --theirs
   lgraph = log --graph --pretty=oneline --abbrev-commit
   cob = checkout -b
   ff = pull --ff-only
   merged = !git branch --merged | grep -v '\\*'
-  
+  sup = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+  fetchforce = !git fetch origin `git symbolic-ref --short HEAD` && git reset --hard origin/`git symbolic-ref --short HEAD`
+
 [diff]
   tool = vimdiff
 
@@ -40,3 +47,5 @@
   clean = git media clean %f
   smudge = git media smudge %f
   required = true
+[icdiff]
+  options = --highlight --line-numbers
