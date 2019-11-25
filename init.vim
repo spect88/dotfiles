@@ -31,6 +31,8 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'vim-syntastic/syntastic'
 
 "syntax
 Plug 'kchmck/vim-coffee-script'
@@ -80,11 +82,14 @@ nmap <leader>g :Files<cr>
 nmap <leader>G :GFiles<cr>
 nmap <leader>b :LustyJuggler<cr>
 nmap <leader>B :Buffers<cr>
+nmap <leader>u :Ag <cword><cr>
 
 nmap <leader>c :split term://bash<cr>
 nmap <leader>r :Dispatch<cr>
-nmap <Leader>j :SplitjoinJoin<cr>
-nmap <Leader>s :SplitjoinSplit<cr>
+nmap <leader>j :SplitjoinJoin<cr>
+nmap <leader>s :SplitjoinSplit<cr>
+nmap <leader>d :windo diffthis<cr>
+nmap <leader>D :diffoff!<cr>
 
 nmap <leader>+ <C-W>5+
 nmap <leader>- <C-W>5-
