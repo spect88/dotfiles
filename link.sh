@@ -29,4 +29,4 @@ link_file ~/git/dotfiles/.bash_profile ~/.bash_profile
 link_file ~/git/dotfiles/.tmux.conf ~/.tmux.conf
 link_file ~/git/dotfiles/.gitconfig ~/.gitconfig
 link_file ~/git/dotfiles/.gitignore_global ~/.gitignore_global
-link_file ~/git/dotfiles/init.vim ~/.config/nvim/init.vim
+link_file ~/git/dotfiles/nvim ~/.config/nvim

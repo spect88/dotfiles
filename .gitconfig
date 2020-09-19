@@ -36,6 +36,7 @@
 
 [diff]
   tool = vimdiff
+  noprefix = true
 
 [difftool]
   prompt = false
@@ -47,5 +48,17 @@
   clean = git media clean %f
   smudge = git media smudge %f
   required = true
+
 [icdiff]
   options = --highlight --line-numbers
+
+[mergetool "nvim"]
+  cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[merge]
+  tool = nvim
+  conflictstyle = diff3
+
+[mergetool]
+  prompt = false
+  keepBackup = false

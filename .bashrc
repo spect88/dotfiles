@@ -1,6 +1,8 @@
 # basics
 export EDITOR=nvim
 export PROMPT_COMMAND='history -a'
+export HISTSIZE=100000
+shopt -s histappend
 
 # prompt
 git_branch () {
@@ -28,6 +30,11 @@ eval "$(hub alias -s)"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/git/tools/shell-scripts:$PATH"
 
+# typos
+alias bim="vim"
+alias got="git"
+alias giit="git"
+
 # lang
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -39,6 +46,12 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # ruby
 eval "$(rbenv init -)"
+
+# python
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
 
 # tmux
 alias tmux="tmux -2"
