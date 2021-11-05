@@ -40,18 +40,18 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # node.js
-export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+# export NVM_DIR="$HOME/.nvm"
+# . "/usr/local/opt/nvm/nvm.sh"
+# export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # ruby
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
 
 # python
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+# export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   eval "$(pyenv init -)"
+# fi
 
 # tmux
 alias tmux="tmux -2"

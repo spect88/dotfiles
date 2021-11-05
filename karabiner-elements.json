@@ -74,7 +74,7 @@
         }
       ]
     },
-{
+    {
       "description": "shift + backspace -> forward delete",
       "manipulators": [
         {
@@ -99,7 +99,7 @@
         }
       ]
     },
-  {
+    {
       "description": "space -> control if with other keys",
       "manipulators": [
         {
@@ -120,6 +120,31 @@
             {
               "key_code": "spacebar"
             }
+          ],
+          "type": "basic"
+        }
+      ]
+    },
+    {
+      "description": "cmd+; -> cmd+l, %, space (Firefox tab search)",
+      "manipulators": [
+        {
+          "from": {
+            "modifiers": {
+              "mandatory": ["command"]
+            },
+            "key_code": "semicolon"
+          },
+          "to": [
+            {
+              "modifiers": ["command"],
+              "key_code": "l"
+            },
+            {
+              "modifiers": ["shift"],
+              "key_code": "5"
+            },
+            { "key_code": "spacebar" }
           ],
           "type": "basic"
         }

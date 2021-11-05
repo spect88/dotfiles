@@ -10,7 +10,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'majutsushi/tagbar'
 
 "exploration
-Plug 'sjbach/lusty'
+" Plug 'sjbach/lusty'
 Plug 'tpope/vim-projectionist'
 Plug 'rking/ag.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -76,7 +76,11 @@ set nofoldenable
 set foldlevel=1
 
 "gui
-colorscheme torte
+if $COLORFGBG == "0;15"
+  colorscheme desert
+else
+  colorscheme torte
+endif
 
 "key mappings
 let mapleader=","
@@ -92,7 +96,7 @@ nmap <leader>B :Buffers<cr>
 nmap <leader>u :Ag <cword><cr>
 nmap <leader>U :Rg<cr>
 
-nmap <leader>c :split term://bash<cr>
+nmap <leader>c :split term://fish<cr>
 nmap <leader>r :Dispatch<cr>
 nmap <leader>j :SplitjoinJoin<cr>
 nmap <leader>s :SplitjoinSplit<cr>
@@ -134,6 +138,7 @@ set dir=~/.vim/tmp
 au BufRead,BufNewFile {Capfile,Guardfile,Gemfile,Rakefile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
 au BufRead,BufNewFile *.sql set commentstring=--%s
 au BufRead,BufNewFile *.toml set commentstring=#%s
+au BufRead,BufNewFile *.fish set ft=bash
 au BufWritePost $MYVIMRC source %
 
 "syntastic config
