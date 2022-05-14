@@ -1,28 +1,20 @@
 filetype off
 
-"ruby settings
-let g:ruby_path = '/usr/bin'
-
 "plugin management
 call plug#begin('~/.local/share/nvim/plugged')
 
-"tags
-Plug 'majutsushi/tagbar'
-
 "exploration
-" Plug 'sjbach/lusty'
 Plug 'tpope/vim-projectionist'
 Plug 'rking/ag.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-peekaboo'
-Plug 'liuchengxu/vim-which-key'
+Plug 'folke/which-key.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'ThePrimeagen/harpoon'
+Plug 'nvim-telescope/telescope.nvim'
 
 "snippets
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'benfowler/telescope-luasnip.nvim'
 Plug 'honza/vim-snippets'
-Plug 'garbas/vim-snipmate'
 
 "dev magic
 Plug 'tpope/vim-rails'
@@ -35,14 +27,17 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'vim-syntastic/syntastic'
+Plug 'neovim/nvim-lspconfig'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
-"syntax
+"syntax / file type support
 Plug 'kchmck/vim-coffee-script'
-Plug 'tpope/vim-markdown'
 Plug 'nono/vim-handlebars'
-Plug 'groenewege/vim-less'
-Plug 'posva/vim-vue'
+Plug 'darfink/vim-plist'
+Plug 'junegunn/vim-journal'
+Plug 'sainnhe/sonokai'
 
 "load plugins
 call plug#end()
@@ -59,8 +54,11 @@ set incsearch
 set vb
 set ruler
 set backspace=2
-set hidden "lusty explorer wants this
+set hidden
 set iskeyword+=- "include '-' in words
+set splitright
+lang en_US.UTF-8
+set timeoutlen=500 "for whichkey
 
 "indent
 set tabstop=2
@@ -70,31 +68,37 @@ set autoindent
 set smartindent
 
 "folding settings
-set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=1
+set foldmethod=expr
+set foldexpr=nvim_treesitter#foldexpr()
 
 "gui
 if $COLORFGBG == "0;15"
   colorscheme desert
 else
-  colorscheme torte
+  colorscheme sonokai
 endif
 
 "key mappings
 let mapleader=","
 
-nmap <leader>t :TagbarToggle<cr>
-nmap <leader>l :BLines<cr>
-nmap <leader>L :Lines<cr>
-nmap <leader>h :Helptags<cr>
-nmap <leader>g :Files<cr>
-nmap <leader>G :GFiles<cr>
-nmap <leader>b :LustyJuggler<cr>
-nmap <leader>B :Buffers<cr>
+nmap <leader>l :Telescope current_buffer_fuzzy_find<cr>
+nmap <leader>h :Telescope help_tags<cr>
+nmap <leader>g :Telescope find_files<cr>
+nmap <leader>G :Telescope git_files<cr>
+nmap <leader>b :Telescope buffers sort_mru=true ignore_current_buffer=true initial_mode=normal path_display=['tail']<cr>
+nmap <leader>B :Telescope buffers<cr>
+nmap <leader>S :Telescope luasnip<cr>
 nmap <leader>u :Ag <cword><cr>
-nmap <leader>U :Rg<cr>
+nmap <leader>U :Telescope grep_string<cr>
+nmap <leader>n :vsplit ~/Documents/notes/vim.md<cr>
+nmap <leader>N :Telescope find_files cwd=~/Documents/notes/<cr>
+nmap <leader>e :e $MYVIMRC<cr>
+nmap <leader>E :e ~/.config/nvim/lua/my-config.lua<cr>
+nmap <leader>m :lua require('harpoon.ui').toggle_quick_menu()<cr>
+nmap <leader>M :lua require('harpoon.mark').add_file()<cr>
 
 nmap <leader>c :split term://fish<cr>
 nmap <leader>r :Dispatch<cr>
@@ -108,6 +112,10 @@ nmap ĺ <C-W>2-
 nmap ÷ <C-W>2+
 nmap ≤ <C-W>2<
 nmap ≥ <C-W>2>
+nmap <M-'> <C-W>2-
+nmap <M-/> <C-W>2+
+nmap <M-,> <C-W>2<
+nmap <M-.> <C-W>2>
 
 nmap <Up>    <NOP>
 nmap <Down>  <NOP>
@@ -130,23 +138,37 @@ nnoremap <C-l> <C-w>l
 
 "typo rescue
 command! W execute "w"
+command! Q execute "q"
+cnoreabbrev <expr> E getcmdtype()==':'&&getcmdline()=~#'^E'?'e':'E'
+
 
 "backup settings
 set dir=~/.vim/tmp
 
 "filetypes
-au BufRead,BufNewFile {Capfile,Guardfile,Gemfile,Rakefile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
-au BufRead,BufNewFile *.sql set commentstring=--%s
-au BufRead,BufNewFile *.toml set commentstring=#%s
-au BufRead,BufNewFile *.fish set ft=bash
-au BufWritePost $MYVIMRC source %
+if !exists('g:filetype_callbacks_set_up')
+  au BufRead,BufNewFile {Capfile,Guardfile,Gemfile,Rakefile,Thorfile,config.ru,.caprc,.irbrc,irb_tempfile*} set ft=ruby
+  au BufRead,BufNewFile *.sql set commentstring=--%s
+  au BufRead,BufNewFile *.toml set commentstring=#%s
+  au BufRead,BufNewFile *.fish set ft=bash
+  au BufRead,BufNewFile *.note set ft=journal
+  au BufWritePost $MYVIMRC source %
+  let g:filetype_callbacks_set_up = 1
+endif
 
-"syntastic config
-let g:syntastic_python_checkers = ['flake8', 'mypy']
+"splitjoin config
+let g:splitjoin_ruby_curly_braces = 0
+let g:splitjoin_ruby_hanging_args = 0
 
-"fzf config
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
-"^ TODO: investigate vim-clap
+"snippets config
+imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
+inoremap <silent> <S-Tab> <cmd>lua require'luasnip'.jump(-1)<Cr>
+snoremap <silent> <Tab> <cmd>lua require('luasnip').jump(1)<Cr>
+snoremap <silent> <S-Tab> <cmd>lua require('luasnip').jump(-1)<Cr>
+imap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
+smap <silent><expr> <C-E> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'
 
-"whichkey config
-source $HOME/.config/nvim/which_key.vim
+"autoclose preview buffer when leaving completion 
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+lua require('my-config')

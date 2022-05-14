@@ -34,6 +34,7 @@
   sup = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
   fetchforce = !git fetch origin `git symbolic-ref --short HEAD` && git reset --hard origin/`git symbolic-ref --short HEAD`
   past6months = log --author Tomasz master --oneline --since '6 months ago'
+  past3weeks = log --author Tomasz master --since '3 weeks ago'
 
 [diff]
   tool = vimdiff
