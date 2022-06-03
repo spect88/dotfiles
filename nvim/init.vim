@@ -31,6 +31,16 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+Plug 'kyazdani42/nvim-web-devicons'
+
+"completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'onsails/lspkind.nvim'
 
 "syntax / file type support
 Plug 'kchmck/vim-coffee-script'
@@ -59,6 +69,7 @@ set iskeyword+=- "include '-' in words
 set splitright
 lang en_US.UTF-8
 set timeoutlen=500 "for whichkey
+set updatetime=250 "for auto-showing diagnostics
 
 "indent
 set tabstop=2

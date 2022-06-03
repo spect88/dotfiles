@@ -2,3 +2,5 @@
 .local
 .bundle/config
 .ignore
+.solargraph
+.solargraph.yml

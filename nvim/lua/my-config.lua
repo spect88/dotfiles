@@ -1,3 +1,6 @@
+require('nvim-web-devicons').setup({
+ default = true,
+})
 -- Set up which-key
 local wk = require('which-key')
 wk.setup({
@@ -11,6 +14,27 @@ wk.setup({
   },
 })
 
+-- Set up diagnostics
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+  local hl = "DiagnosticSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  float = {
+    focusable = false,
+    close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
+    border = 'rounded',
+    source = 'always',
+    prefix = ' ',
+  },
+})
+
 -- Set up LSP
 local on_attach = function(client, bufnr)
   -- Enable completion triggered by <c-x><c-o>
@@ -18,6 +42,15 @@ local on_attach = function(client, bufnr)
   -- Enable formatting triggered by gq
   vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
 
+  local diagnostics_on = true
+  local toggle_diagnostics = function()
+    diagnostics_on = not diagnostics_on
+    if diagnostics_on then
+      vim.diagnostic.show()
+    else
+      vim.diagnostic.hide()
+    end
+  end
   wk.register({
     ['<space>'] = {
       name = 'lsp',
@@ -46,12 +79,25 @@ local on_attach = function(client, bufnr)
     },
     ['[d'] = { vim.diagnostic.goto_prev, 'prev diagnostic' },
     [']d'] = { vim.diagnostic.goto_next, 'next diagnostic' },
+    ['yop'] = { toggle_diagnostics, 'toggle diagnostics' },
     K = { vim.lsp.buf.hover, 'show hover info' },
   }, { mode = 'n', silent=true, buffer=0 })
+
+  -- auto-open diagnostic float
+  vim.api.nvim_create_autocmd('CursorHold', {
+    buffer = bufnr,
+    callback = function()
+      vim.diagnostic.open_float(nil, { scope = 'cursor' })
+    end
+})
 end
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local servers = { 'solargraph', 'tsserver', 'pyright' }
 for _, lsp in pairs(servers) do
-  require('lspconfig')[lsp].setup { on_attach = on_attach }
+  require('lspconfig')[lsp].setup {
+    capabilities = capabilities,
+    on_attach = on_attach,
+  }
 end
 
 -- Bridge simple external tools to the LSP client
@@ -157,3 +203,53 @@ wk.register({
     ['['] = { 'next class end' },
   },
 })
+
+-- Set up completion
+local lspkind = require('lspkind')
+local cmp = require('cmp')
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  completion = {
+    autocomplete = false,
+  },
+  formatting = {
+    format = lspkind.cmp_format({
+      mode = 'symbol_text',
+      menu = {
+        nvim_lsp = "[lsp]",
+        nvim_lua = "[lua]",
+        path = "[path]",
+        luasnip = "[snip]",
+        buffer = "[buf]",
+      },
+    }),
+  },
+  window = {
+    documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'path', options = { trailing_slash = true } },
+    { name = 'luasnip' },
+  }, {
+    { name = 'buffer', keyword_length = 5 },
+  }),
+  experimental = {
+    ghost_text = true,
+  },
+})
+wk.register({
+  ['<C-x><C-o>'] = { cmp.complete, 'trigger completion' },
+}, { mode = 'i' })
