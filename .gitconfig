@@ -87,3 +87,11 @@
   commit-style = raw
   file-style = raw
   hunk-header-style = omit
+
+[diff "hex"]
+  textconv = hexdump -v -C
+  binary = true
+
+[push]
+  default = current
+  autoSetupRemote = true
