@@ -1,0 +1,7 @@
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/* hide the 3 window icons and useless spacers */
+.titlebar-buttonbox-container,
+.titlebar-spacer {
+  display: none;
+}
