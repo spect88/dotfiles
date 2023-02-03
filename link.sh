@@ -26,6 +26,9 @@ link_file () {
 link_file ~/git/dotfiles/karabiner-elements.json ~/.config/karabiner/assets/complex_modifications/karabiner-elements.json
 link_file ~/git/dotfiles/.bashrc ~/.bashrc
 link_file ~/git/dotfiles/.bash_profile ~/.bash_profile
+link_file ~/git/dotfiles/.yabairc ~/.yabairc
+link_file ~/git/dotfiles/.skhdrc ~/.skhdrc
+link_file ~/git/dotfiles/.simplebarrc ~/.simplebarrc
 link_file ~/git/dotfiles/.tmux.conf ~/.tmux.conf
 link_file ~/git/dotfiles/.gitconfig ~/.gitconfig
 link_file ~/git/dotfiles/.gitignore_global ~/.gitignore_global
