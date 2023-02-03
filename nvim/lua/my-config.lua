@@ -91,7 +91,7 @@ local on_attach = function(client, bufnr)
     end
 })
 end
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local servers = { 'solargraph', 'tsserver', 'pyright' }
 for _, lsp in pairs(servers) do
   require('lspconfig')[lsp].setup {
@@ -109,6 +109,9 @@ local sources = {
   null_ls.builtins.diagnostics.flake8
 }
 null_ls.setup({ sources = sources })
+
+-- Display LSP status
+require('fidget').setup()
 
 -- Set up snippets
 require('luasnip.loaders.from_snipmate').lazy_load()

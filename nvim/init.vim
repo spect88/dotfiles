@@ -5,6 +5,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 "exploration
 Plug 'tpope/vim-projectionist'
+Plug 'tpope/vim-vinegar'
 Plug 'rking/ag.vim'
 Plug 'folke/which-key.nvim'
 Plug 'nvim-lua/plenary.nvim'
@@ -12,7 +13,7 @@ Plug 'ThePrimeagen/harpoon'
 Plug 'nvim-telescope/telescope.nvim'
 
 "snippets
-Plug 'L3MON4D3/LuaSnip'
+Plug 'L3MON4D3/LuaSnip', {'tag': 'v1.*'}
 Plug 'benfowler/telescope-luasnip.nvim'
 Plug 'honza/vim-snippets'
 
@@ -32,6 +33,7 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'kyazdani42/nvim-web-devicons'
+Plug 'j-hui/fidget.nvim'
 
 "completion
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -141,6 +143,9 @@ nmap gP :cd -<cr>
 vnoremap < <gv
 vnoremap > >gv
 
+"don't touch unnamed register when pasting over visual selection
+xnoremap <expr> p 'pgv"' . v:register . 'y'
+
 "easier window navigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -163,6 +168,7 @@ if !exists('g:filetype_callbacks_set_up')
   au BufRead,BufNewFile *.toml set commentstring=#%s
   au BufRead,BufNewFile *.fish set ft=bash
   au BufRead,BufNewFile *.note set ft=journal
+  au BufRead,BufNewFile .simplebarrc set ft=json
   au BufWritePost $MYVIMRC source %
   let g:filetype_callbacks_set_up = 1
 endif
